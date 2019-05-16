@@ -1,0 +1,53 @@
+def val(c): #átalakít stringből számba
+    if c >= '0' and c <= '9':
+        return ord(c) - ord('0')
+    else:
+        return ord(c) - ord('A') + 10;
+
+
+
+
+
+def reVal(num): # ez a függvény a fromDeci fv-ben van meghívva,visszaalakít számból stringbe
+    if (num >= 0 and num <= 9): #ha a paraméterként megadott szám 0 és 9 között van, akkor
+        return chr(num + ord('0')); #visszatér a nullákkal kiegészített számmal
+    else:
+        return chr(num - 10 + ord('A'));#különben a számból kivonunk 10-et és úgy rendezzük 
+
+
+def toDeci(str, base): #a függvény paraméterként megkapja a számot string formátumban és a számrendszert,átkonvertál 10-es számrendszerbe
+    llen = len(str) 
+    power = 1
+    num = 0
+
+
+    for i in range(llen - 1, -1, -1): #fordítva végig megy a karaktereken
+
+        if val(str[i]) >= base: #ellenőrzés
+            print('Invalid Number') #ha érvénytelen a szám
+            return -1 
+        #itt váltja át a számrendszerbe:
+        num += val(str[i]) * power #ha érvényes a hatvány szorzódik a bázissal ,visszatér az összeggel
+        power = power * base
+    return num #visszatér a szám 10es számrendszer beli alakjával
+
+
+def fromDeci(res, base, inputNum): #10es számrendszer beli számot átalakítjuk a megadott számrendszer belivé,visszaalakítja az eredeti számrendszerbe
+    index = 0;
+    while (inputNum > 0): #magát az összeadás műveletet a 10-es számrendszerben végzi el
+        res += reVal(inputNum % base); #itt használjuk a fent definiált reVal() függvényt
+        inputNum = int(inputNum / base);
+
+    res = res[::-1]; #megfordítjuk a kapott számot
+
+    return res; #visszatérünk a megfordított számmal
+
+#itt kezdődik a main, fölötte pedig definiálva vannak a függvények
+a = int(input('Hanyas számrendszer? (számmal)'))#bekérjük a 3 értéket,számként olvasom be a felhasználótól
+b = input('Első szám: ') #stringként olvasom be a felhasználótól
+c = input('Masodik szam: ') #itt is stringként olvasom be
+
+elso=toDeci(b,a) #megvizsgáljuk a függvénnyel, hogy megfelelő számot kaptunk-e,meghívom a függvényt
+masodik=toDeci(c,a) #itt is megvizsgáljuk, hogy jó-e a kapott szám
+res=""
+print("Az összeg ebben a számrendszerben ",fromDeci(res,a,elso+masodik) ) #kiiratásnál a fromDeci fv-t hívjuk meg a három paraméterrel, amiből az utolsó paraméter a két szám összege
